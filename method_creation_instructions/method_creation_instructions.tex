@@ -1,0 +1,136 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{float} %with H, places the float at the precise location in the Latex code.
+\usepackage{chemformula}
+\usepackage{subcaption} % allows things to be captioned and allows multiple images per figure
+\usepackage[backend=biber]{biblatex}
+\usepackage{hyperref}
+\usepackage{changepage}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=red,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\urlstyle{same}
+%\graphicspath{ {Users/ianbillinge/Documents/yiplab/projects/tsse/candidates/deghe}}
+%SetFonts
+
+\newcommand{\pka}{pK$_{\text{a}}$}
+\newcommand{\pkb}{pK$_{\text{b}}$}
+\newcommand{\pmm}{$\pm$}
+\newcommand{\Tl}{T$_{L}$}
+\newcommand{\Th}{T$_{H}$}
+\newcommand{\us}[1]{$_{\text{#1}}$}
+\newcommand{\degC}{$^{\circ}$C}
+\newcommand{\asub}[1]{$a_{\mathrm{#1}}$}
+\newcommand{\xsub}[1]{$x_{\mathrm{#1}}$}
+\newcommand{\qA}{$\text{Å}^{-1}$}
+
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+
+\graphicspath{
+{/Users/ianbillinge/Documents/yiplab/projects/saxs_amine/2022-07-30/plots} 
+}
+
+\title{Safety and Method Creation}
+\author{Ian Billinge}
+\date{August 6, 2025}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+
+\section*{Human safety considerations}
+There are three major risks associated with this instrument: chemical exposure, pinches/crushes, and needle sticks.
+
+To mitigate risks around pinch/crush and needle sticks, take reasonable safety precautions: wear eye protection and other appropriate PPE. Take reasonable precautions around the instrument: don't put any part of your body or clothing within reach of the arm when it is moving.
+
+Chemical exposure: Since the arm is dispensing experimental liquids, there is risk of chemical exposure if the waste container is improperly set up, overflows, or if the needle gets stuck somewhere it shouldn't (i.e., if you improperly set up a method, and the experiment dispenses overnight into a vessel that overflows).
+
+Be aware of the tubes connecting your experiment to the autosampler. The tubing will move along with the arm, so there is potential for tubing to snag on experimental equipment and pull/tip something over. \emph{Always} make sure there is enough slack in the tubing to allow the autosampler to operate without pulling something over, and make sure the tubing is positioned so that it won't snag on anything.
+
+\section*{Instrument safety considerations}
+The only really damaging thing that you can do to the instrument is attempt to manually move the arm (i.e., with your hands) while the instrument is on. If you need to move the sampling arm or needle by hand, turn the power off (on the back of the instrument). The needle and arm can then be moved (it takes a reasonable amount of force).
+
+Other than that, Gilson informs me that the instrument is very robust.
+
+\section*{Method Creation Directions}
+\begin{enumerate}
+\item Open Trilution LH software. A software window should open up with a username and password. Wait a few seconds while the computer establishes a connection to the instrument.
+
+\begin{quote}
+	\emph{Note: A dialog window will appear in the lower left showing three connections. If that window does not appear, connection to the instrument has not been established.}
+	
+	\emph{Try: restarting the software, restarting the instrument, restarting the computer, and checking the cable connections.}
+\end{quote}
+
+Once instrument connection has been established after a few seconds, enter the following:
+\begin{center}
+\begin{tabular}{l l}
+	\hline
+	Username & Password \\
+	\hline
+	\hline
+	\texttt{Administrator} & \emph{there is no password} \\
+	\hline
+\end{tabular}
+\end{center}
+
+\item Click on \texttt{Methods}.
+\item Select \texttt{Configuration} tab. Go to  \texttt{Liquid Handlers} Add 223 Sample Changer by dragging and dropping it into the main window.
+\item Click on \texttt{Sample Tray} tab. Load \texttt{4x22-vertical}. This represents the instrument with the four Code-22 trays, with the sample trays elevated on posts to increase the height of the sample tray.
+
+\begin{quote}
+	\emph{Note: \texttt{4x22-vertical} allocates all wells to sample dispensing, with none for source. If, in the future, some applications require source wells, you will need to define a different Sample Tray.}
+\end{quote}
+
+
+\begin{enumerate}
+	\item If defining a new set of trays, for example to accommodate a 3D-printed rack, click on each section sequentially and allocate the wells.
+\end{enumerate}
+
+\item Click on \texttt{Method} tab. A blank page should show up. This is a graphical programming environment, a bit like \href[]{https://en.wikipedia.org/wiki/Scratch_(programming_language)}{the Scratch programming language.} To add things to the method, drag and drop Tasks into the working space.
+
+Tasks can be found in the lower-left window. We don't typically use most of these tasks. In fact, entire folders of tasks are not used, including (currently) all \texttt{Liquid Handling} tasks. The most used are 
+\texttt{Tweaks/Move To (Scheduled)}
+
+\begin{center}
+	\begin{tabular}{l p{10cm}}
+		\hline
+		Name & Description \\
+		\hline \hline
+		\texttt{Tweaks/Move To} & Moves the autosampler to either: top z-axis position, Home position, XXX, YYY, Rinse position\\
+		\texttt{Tweaks/Move To (Scheduled)} & Moves to a well in the Zone. To move autosampler to Rinse position, make sure Zone is set to Rinse. To move autosampler to sample position, make sure it is set to XXX and \\
+	\hline
+	\end{tabular}
+\end{center}
+
+\begin{quote}
+	\emph{Note: To avoid crashes, it is \textbf{highly recommenable} to begin every method with a \texttt{Move to: Home}. This helps prevents the instrument from crashing.}
+\end{quote}
+
+\item Add loops. Most methods involve loops. To do this, drag and drop a loop into the main workspace. The loop workspace is on the far right. To add \texttt{Tasks} into the loop, click and drag the tasks into the loop workspace.
+
+
+
+\section*{Top tips}
+\begin{itemize}
+	\item When doing method development, which involves testing of unfamiliar methods, it is often good to remove the needle to avoid needle stick risk.
+	\item It is often a good idea to add a \texttt{Move to: Home} to the beginning of methods. This will help prevent the instrument from crashing. 
+\end{itemize}
+
+\end{enumerate}
+
+
+
+
+
+\end{document} 
