@@ -119,7 +119,31 @@ Tasks can be found in the lower-left window. We don't typically use most of thes
 
 \item Add loops. Most methods involve loops. To do this, drag and drop a loop into the main workspace. The loop workspace is on the far right. To add \texttt{Tasks} into the loop, click and drag the tasks into the loop workspace.
 
+\section*{Diverting valve}
+\subsection*{Purpose}
+The Gilson 223 comes with a three-way diverting valve attached to the sampler arm. The inlet to this valve is on the top of the valve (as mounted on the instrument). The fluid can come out of either side of the valve. The purpose is multifold:
 
+\begin{itemize}
+	\item Stop sample from dispensing into vials as the needle passes over them. If the valve is not used, liquid is constantly coming out of the sample needle. With low flow rates, this is often not a problem. But with high flow rates, it means that water is constantly squirting out. As the needle passes over the rack of vials, liquid may end up in unwanted places, causing sample contamination.
+	\item Allow recirculating experiments. While valve is set to not dispense to the needle, the fluid can be recirculated back to the reactor, allowing you to divert flow to take a sample.
+\end{itemize}
+
+\subsection*{Operation}
+To operate the diverting valve, a GSIOC task must be used (GSIOC is Gilson's proprietary language for communicating with the instruments). The GSIOC task can be found at \texttt{Auxiliary/GSIOC}. Select the Liquid Handler instrument (or use a GSIOC with ID command, with \texttt{ID = 10}).
+
+\begin{center}
+	\begin{tabular}{l p{10cm}}
+		\hline
+		GSIOC Command & Description \\
+		\hline \hline
+		\texttt{V0} & Sends fluid to recirculation/waste (the port pointing away from the instrument's body)\\
+		\texttt{V1} & Sends fluid to the needle  (the port pointing at the instrument's body) \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection*{Ports}
+The ports of the valve take 1/4"/28 connectors. We have a variety of hose barbs, but they can also be used with PEEK connectors if you want to use a very thin tube. If you need to purchase connectors, industrial suppliers like McMaster carry them.
 
 \section*{Top tips}
 \begin{itemize}
