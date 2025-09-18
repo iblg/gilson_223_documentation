@@ -48,7 +48,7 @@
 \maketitle
 
 
-\section*{Human safety considerations}
+\section{Human safety considerations}
 There are three major risks associated with this instrument: chemical exposure, pinches/crushes, and needle sticks.
 
 To mitigate risks around pinch/crush and needle sticks, take reasonable safety precautions: wear eye protection and other appropriate PPE. Take reasonable precautions around the instrument: don't put any part of your body or clothing within reach of the arm when it is moving.
@@ -57,12 +57,12 @@ Chemical exposure: Since the arm is dispensing experimental liquids, there is ri
 
 Be aware of the tubes connecting your experiment to the autosampler. The tubing will move along with the arm, so there is potential for tubing to snag on experimental equipment and pull/tip something over. \emph{Always} make sure there is enough slack in the tubing to allow the autosampler to operate without pulling something over, and make sure the tubing is positioned so that it won't snag on anything.
 
-\section*{Instrument safety considerations}
+\section{Instrument safety considerations}
 The only really damaging thing that you can do to the instrument is attempt to manually move the arm (i.e., with your hands) while the instrument is on. If you need to move the sampling arm or needle by hand, turn the power off (on the back of the instrument). The needle and arm can then be moved (it takes a reasonable amount of force).
 
 Other than that, Gilson informs me that the instrument is very robust.
 
-\section*{Method Creation Directions}
+\section{Method Creation Directions}
 \begin{enumerate}
 \item Open Trilution LH software. A software window should open up with a username and password. Wait a few seconds while the computer establishes a connection to the instrument.
 
@@ -99,16 +99,20 @@ Once instrument connection has been established after a few seconds, enter the f
 
 \item Click on \texttt{Method} tab. A blank page should show up. This is a graphical programming environment, a bit like \href[]{https://en.wikipedia.org/wiki/Scratch_(programming_language)}{the Scratch programming language.} To add things to the method, drag and drop Tasks into the working space.
 
-Tasks can be found in the lower-left window. We don't typically use most of these tasks. In fact, entire folders of tasks are not used, including (currently) all \texttt{Liquid Handling} tasks. The most used are 
-\texttt{Tweaks/Move To (Scheduled)}
+Tasks can be found in the lower-left window. We don't typically use most of these tasks. In fact, entire folders of tasks are not used, including (currently) all \texttt{Liquid Handling} tasks. The most used are  outlined below:
 
 \begin{center}
 	\begin{tabular}{l p{10cm}}
 		\hline
 		Name & Description \\
 		\hline \hline
-		\texttt{Tweaks/Move To} & Moves the autosampler to either: top z-axis position, Home position, XXX, YYY, Rinse position\\
-		\texttt{Tweaks/Move To (Scheduled)} & Moves to a well in the Zone. To move autosampler to Rinse position, make sure Zone is set to Rinse. To move autosampler to sample position, make sure it is set to XXX and \\
+		\texttt{Tweaks/Move To} & Moves the autosampler to either: top z-axis position, home position, xy coordinate pair, or z coordinate.\\
+		\texttt{Tweaks/Move To Zone} & Moves to a well in the selected Zone (Zone = Source, Inside Rinse, Outside Rinse, Result). 
+		
+		\textit{Make sure you have the correct zone set. I commonly leave it on Source and get an error when I want it to move to the Result zone}. \\
+		
+		\texttt{Auxiliary/Wait} & Waits the specified time (in minutes).\\
+		\texttt{Auxiliary/GSIOC} & Sends a GSIOC signal to a designated instrument. GSIOC is a coding-like interface proprietary to Gilson. A list of GSIOC commands is available in the instrument manual.\\
 	\hline
 	\end{tabular}
 \end{center}
@@ -119,8 +123,8 @@ Tasks can be found in the lower-left window. We don't typically use most of thes
 
 \item Add loops. Most methods involve loops. To do this, drag and drop a loop into the main workspace. The loop workspace is on the far right. To add \texttt{Tasks} into the loop, click and drag the tasks into the loop workspace.
 
-\section*{Diverting valve}
-\subsection*{Purpose}
+\section{Diverting valve}
+\subsection{Purpose}
 The Gilson 223 comes with a three-way diverting valve attached to the sampler arm. The inlet to this valve is on the top of the valve (as mounted on the instrument). The fluid can come out of either side of the valve. The purpose is multifold:
 
 \begin{itemize}
@@ -128,7 +132,7 @@ The Gilson 223 comes with a three-way diverting valve attached to the sampler ar
 	\item Allow recirculating experiments. While valve is set to not dispense to the needle, the fluid can be recirculated back to the reactor, allowing you to divert flow to take a sample.
 \end{itemize}
 
-\subsection*{Operation}
+\subsection{Operation}
 To operate the diverting valve, a GSIOC task must be used (GSIOC is Gilson's proprietary language for communicating with the instruments). The GSIOC task can be found at \texttt{Auxiliary/GSIOC}. Select the Liquid Handler instrument (or use a GSIOC with ID command, with \texttt{ID = 10}).
 
 \begin{center}
@@ -142,10 +146,12 @@ To operate the diverting valve, a GSIOC task must be used (GSIOC is Gilson's pro
 	\end{tabular}
 \end{center}
 
-\subsection*{Ports}
+\textit{There is a task (\texttt{Auxiliary/Valve Off}) which appears to be the correct choice for operating the valve. however, this task does not work. Do not use this command to operate the valve. A bit frustrating.}
+
+\subsection{Ports}
 The ports of the valve take 1/4"/28 connectors. We have a variety of hose barbs, but they can also be used with PEEK connectors if you want to use a very thin tube. If you need to purchase connectors, industrial suppliers like McMaster carry them.
 
-\section*{Top tips}
+\section{Top tips}
 \begin{itemize}
 	\item When doing method development, which involves testing of unfamiliar methods, it is often good to remove the needle to avoid needle stick risk.
 	\item It is often a good idea to add a \texttt{Move to: Home} to the beginning of methods. This will help prevent the instrument from crashing. 
@@ -153,7 +159,36 @@ The ports of the valve take 1/4"/28 connectors. We have a variety of hose barbs,
 
 \end{enumerate}
 
+\section{Common GSIOC Commands}
+These commands can be used to control the instrument via the GSIOC Utility (located in the computer's lower toolbar; the icon is a wrench).
 
+They can be used in methods using the GSIOC Task.
+
+
+\begin{center}
+	\begin{tabular}{p{2cm} p{1.5cm} p{1.5cm} p{10cm}}
+		\hline
+		GSIOC Command & Instrument ID\footnote{By default the autosampler has ID = 10 and the minipuls3 pump has ID = 30} & Buffered or immediate & Description \\
+		
+		\hline \hline
+		\texttt{H} & 10 & b &Sends sampling arm to home position. \\
+		
+		\texttt{Xxxxx/yyyy} & 10 &  b &  Sends sampling arm to xy-coordinate (xxxx, yyyy), measured in tenths of millimeters.
+				
+				Sending to a position of (1 cm, 1 cm) would require the input \texttt{X0100/0100}. \\
+				
+		\texttt{X} & 10 & i & Gets current arm xy-position.\\
+
+		\texttt{V0} & 10 & b & Operates three-way valve: sends fluid to recirculation/waste (the port pointing away from the instrument's body)\\
+		
+		\texttt{V1} & 10 & b & Operates three-way valve: sends fluid to the needle  (the port pointing at the instrument's body) \\
+		
+		\texttt{K<} & 30 & b & Runs pump in reverse direction.\\
+		\texttt{K>} & 30 & b & Runs pump in forward direction.\\
+		\texttt{KH} & 30 & b & Stops pump.\\
+		\hline
+	\end{tabular}
+\end{center}
 
 
 
